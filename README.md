@@ -1,1 +1,49 @@
 # automated-plant-watering-project
+import edu.princeton.cs.introcs.StdDraw;
+import org.firmata4j.I2CDevice;
+import org.firmata4j.IODevice;
+import org.firmata4j.Pin;
+import org.firmata4j.firmata.FirmataDevice;
+import org.firmata4j.ssd1306.SSD1306;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Timer;
+public class Main {
+    static final byte I2C0 = 0x3C; // OLED Display
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        String myUSB = "/dev/cu.usbserial-0001";
+        IODevice theArduinoObject = new FirmataDevice(myUSB);
+        theArduinoObject.start();
+        theArduinoObject.ensureInitializationIsDone();
+
+        //Set up OLED
+        I2CDevice i2cObject = theArduinoObject.getI2CDevice((byte) 0x3C);
+        SSD1306 theOledObject = new SSD1306(i2cObject, SSD1306.Size.SSD1306_128_64);
+        theOledObject.init();
+
+        // Set up sensor and motor
+        Pin sensor = theArduinoObject.getPin(15);
+        sensor.setMode(Pin.Mode.ANALOG);
+        Pin motor = theArduinoObject.getPin(7);
+        motor.setMode(Pin.Mode.OUTPUT);
+
+        ArrayList<Long> readings = new ArrayList<Long>();
+
+        var task = new SensorTask(sensor, motor, theOledObject, readings);
+        new Timer().schedule(task, 0, 1000);
+
+
+        StdDraw.setXscale(-3,100);
+        StdDraw.setYscale(-30,1100);
+        StdDraw.setPenRadius(0.005);
+        StdDraw.setPenColor(StdDraw.BLUE);
+        StdDraw.line(0,0,0,1000);
+        StdDraw.line(0,0,100,0);
+        StdDraw.text(50,-30,"[X]");
+        StdDraw.text(-3,500,"[Y]");
+        StdDraw.text(50,1100,"Soil Sensor/Time Graph");
+
+//       theArduinoObject.stop();
+    }
+}
