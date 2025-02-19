@@ -1,4 +1,5 @@
 # automated-plant-watering-project
+# main.java
 import edu.princeton.cs.introcs.StdDraw;
 import org.firmata4j.I2CDevice;
 import org.firmata4j.IODevice;
@@ -47,3 +48,65 @@ public class Main {
 //       theArduinoObject.stop();
     }
 }
+
+#sensorTask.java
+import edu.princeton.cs.introcs.StdDraw;
+import org.firmata4j.firmata.FirmataDevice;
+import org.firmata4j.ssd1306.SSD1306;
+import org.firmata4j.ssd1306.MonochromeCanvas;
+import org.firmata4j.I2CDevice;
+
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.io.IOException;
+import org.firmata4j.IODevice;
+import org.firmata4j.Pin;
+
+public class SensorTask extends TimerTask{
+
+    private final SSD1306 theOledObject;
+    private final Pin sensor;
+    private final Pin motor;
+    private ArrayList<Long> values;
+    private int counter = 0;
+
+    public SensorTask(Pin sensorPin, Pin motorPin, SSD1306 DisplayObject, ArrayList<Long> readings) {
+
+        theOledObject = DisplayObject;
+        sensor = sensorPin;
+        motor = motorPin;
+        values = readings;
+    }
+    @Override
+    public void run() {
+        counter++;
+        // Sensor Object
+        long sensorValue = sensor.getValue();
+        values.add(sensorValue);
+
+        StdDraw.text(counter, (double) values.get(values.size() - 1), ".");
+
+        theOledObject.display();
+        try{
+            if(sensorValue>=730){
+                this.motor.setValue(1);
+                theOledObject.getCanvas().drawString(0,0, String.valueOf(sensorValue));
+                theOledObject.getCanvas().drawString(0,50, "water pumping");
+                theOledObject.display();
+                System.out.println("water is pumping. Sensor value is: " + sensorValue);
+            }
+            else if (sensorValue<700) {
+                this.motor.setValue(0);
+                theOledObject.getCanvas().drawString(0,0, String.valueOf(sensorValue));
+                theOledObject.getCanvas().drawString(0,50, "soil is wet");
+                theOledObject.display();
+                System.out.println("water stopped pumping. Sensor value is: " + sensorValue);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
