@@ -1,5 +1,14 @@
 main.java
-import edu.princeton.cs.introcs.StdDraw; import org.firmata4j.I2CDevice; import org.firmata4j.IODevice; import org.firmata4j.Pin; import org.firmata4j.firmata.FirmataDevice; import org.firmata4j.ssd1306.SSD1306; import java.io.IOException; import java.util.ArrayList; import java.util.Timer; public class Main { static final byte I2C0 = 0x3C; // OLED Display public static void main(String[] args) throws IOException, InterruptedException {
+import edu.princeton.cs.introcs.StdDraw; 
+import org.firmata4j.I2CDevice; 
+import org.firmata4j.IODevice; 
+import org.firmata4j.Pin; 
+import org.firmata4j.firmata.FirmataDevice; 
+import org.firmata4j.ssd1306.SSD1306; 
+import java.io.IOException; 
+import java.util.ArrayList; 
+import java.util.Timer; 
+public class Main { static final byte I2C0 = 0x3C; // OLED Display public static void main(String[] args) throws IOException, InterruptedException {
 
     String myUSB = "/dev/cu.usbserial-0001";
     IODevice theArduinoObject = new FirmataDevice(myUSB);
@@ -34,9 +43,19 @@ import edu.princeton.cs.introcs.StdDraw; import org.firmata4j.I2CDevice; import 
     StdDraw.text(50,1100,"Soil Sensor/Time Graph");
 // theArduinoObject.stop(); } }
 
-#sensorTask.java import edu.princeton.cs.introcs.StdDraw; import org.firmata4j.firmata.FirmataDevice; import org.firmata4j.ssd1306.SSD1306; import org.firmata4j.ssd1306.MonochromeCanvas; import org.firmata4j.I2CDevice;
+#sensorTask.java 
+import edu.princeton.cs.introcs.StdDraw; 
+import org.firmata4j.firmata.FirmataDevice; 
+import org.firmata4j.ssd1306.SSD1306; 
+import org.firmata4j.ssd1306.MonochromeCanvas; 
+import org.firmata4j.I2CDevice;
 
-import java.util.ArrayList; import java.util.Timer; import java.util.TimerTask; import java.io.IOException; import org.firmata4j.IODevice; import org.firmata4j.Pin;
+import java.util.ArrayList; 
+import java.util.Timer; 
+import java.util.TimerTask; 
+import java.io.IOException; 
+import org.firmata4j.IODevice; 
+import org.firmata4j.Pin;
 
 public class SensorTask extends TimerTask{
 
@@ -84,22 +103,3 @@ public void run() {
     }
 }
 }
-
-About
-No description, website, or topics provided.
-Resources
- Readme
- Activity
-Stars
- 0 stars
-Watchers
- 1 watching
-Forks
- 0 forks
-Releases
-No releases published
-Create a new release
-Packages
-No packages published
-Publish your first package
-Footer
